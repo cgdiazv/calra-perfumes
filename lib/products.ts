@@ -245,7 +245,7 @@ export const PRODUCTS: Product[] = [
   },
 
   // ==========================================
-  // DISCOVERY GIFT SETS ($250)
+  // DISCOVERY GIFT SETS ($375)
   // ==========================================
   {
     id: "set-fearless-wild",
@@ -253,7 +253,7 @@ export const PRODUCTS: Product[] = [
     subtitle: "Luxury Duo Set in Collector Presentation Box",
     collection: "sets",
     collectionName: "Discovery Duo Sets",
-    price: 250,
+    price: 375,
     image: "/products/set_fearless.webp",
     volume: "2x 100ml Full Set",
     notes: "Smoky Tuscan Leather & Gourmand Dulce de Leche",
@@ -269,7 +269,7 @@ export const PRODUCTS: Product[] = [
     subtitle: "Feminine Haute Parfumerie Presentation Set",
     collection: "sets",
     collectionName: "Discovery Duo Sets",
-    price: 250,
+    price: 375,
     image: "/products/set_intense.webp",
     volume: "2x 100ml Full Set",
     notes: "Damask Rose Honey & Powdery Violet Amber",
@@ -285,7 +285,7 @@ export const PRODUCTS: Product[] = [
     subtitle: "Architectural Precision Double Extrait Set",
     collection: "sets",
     collectionName: "Discovery Duo Sets",
-    price: 250,
+    price: 375,
     image: "/products/set_jade.webp",
     volume: "2x 100ml Full Set",
     notes: "Green Tea Jasmine & Crisp Citrus Cardamom Cedar",
@@ -301,7 +301,7 @@ export const PRODUCTS: Product[] = [
     subtitle: "Gold & Oceanic Blue Collector Edition",
     collection: "sets",
     collectionName: "Discovery Duo Sets",
-    price: 250,
+    price: 375,
     image: "/products/set_orosgrande.webp",
     volume: "2x 100ml Full Set",
     notes: "Precious Saffron Oud & Blue Cypress Oceanic Cedar",
@@ -373,5 +373,13 @@ export const CATEGORY_DETAILS: Record<
     badge: "The Royal Collection",
     featuredImage: "/products/black_phoenix.webp",
     products: ROYAL_COLLECTION,
+  },
+  sets: {
+    title: "Discovery & Gift Sets",
+    subtitle:
+      "Exclusive collector duo sets pairing full-size extraits in luxury presentation boxes.",
+    badge: "Collector Duo Sets",
+    featuredImage: "/products/set_fearless.webp",
+    products: PRODUCTS.filter((p) => p.categories.includes("sets")),
   },
 };
