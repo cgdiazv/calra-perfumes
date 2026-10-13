@@ -146,11 +146,11 @@ export function CartDrawer() {
                   <button
                     onClick={() => {
                       addItem({
-                        id: "fearless-edp",
-                        name: "Fearless Eau de Parfum",
-                        subtitle: "Niche Extrait de Parfum",
-                        price: 185,
-                        image: "/products/fearless01-1.webp",
+                        id: "black-phoenix",
+                        name: "Black Phoenix Extrait",
+                        subtitle: "The Royal Collection",
+                        price: 375,
+                        image: "/products/black_phoenix.webp",
                         volume: "100ml / 3.4 fl. oz.",
                       });
                     }}

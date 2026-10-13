@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { label: "MEN", href: "/category/men" },
   { label: "WOMEN", href: "/category/women" },
   { label: "UNISEX", href: "/category/unisex" },
-  { label: "NEW ARRIVALS", href: "/category/new-arrivals" },
+  { label: "NEW COLLECTION", href: "/category/new-arrivals" },
 ];
 
 export function Navbar({ className }: { className?: string }) {

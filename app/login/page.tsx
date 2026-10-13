@@ -78,7 +78,7 @@ function LoginFormContent() {
             {/* Privilege Bullets */}
             <div className="space-y-4 pt-4 border-t border-rose-900/50">
               <div className="flex items-start gap-3">
-                <Gift className="size-4 text-amber-300 shrink-0 mt-0.5" />
+                <Gift className="size-4 text-[#d4b370] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <p className="font-semibold text-white">Complimentary Samples</p>
                   <p className="text-rose-100/70">
@@ -88,7 +88,7 @@ function LoginFormContent() {
               </div>
 
               <div className="flex items-start gap-3">
-                <Sparkles className="size-4 text-amber-300 shrink-0 mt-0.5" />
+                <Sparkles className="size-4 text-[#d4b370] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <p className="font-semibold text-white">Private Previews</p>
                   <p className="text-rose-100/70">
@@ -98,7 +98,7 @@ function LoginFormContent() {
               </div>
 
               <div className="flex items-start gap-3">
-                <ShieldCheck className="size-4 text-amber-300 shrink-0 mt-0.5" />
+                <ShieldCheck className="size-4 text-[#d4b370] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <p className="font-semibold text-white">Guaranteed Authenticity</p>
                   <p className="text-rose-100/70">
@@ -113,7 +113,7 @@ function LoginFormContent() {
             Need concierge assistance? Contact{" "}
             <a
               href="mailto:info@calraperfumes.com"
-              className="text-white underline hover:text-amber-200"
+              className="text-white underline hover:text-[#e8d5ae]"
             >
               info@calraperfumes.com
             </a>

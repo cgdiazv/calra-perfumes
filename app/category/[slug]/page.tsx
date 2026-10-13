@@ -1,227 +1,11 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, ShoppingBag, Sparkles } from "lucide-react";
+import { ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/cart-context";
-
-interface Product {
-  id: string;
-  name: string;
-  subtitle: string;
-  price: number;
-  image: string;
-  volume: string;
-  notes: string;
-}
-
-const PRODUCTS: Record<string, { title: string; subtitle: string; items: Product[] }> = {
-  men: {
-    title: "Men's Niche Fragrances",
-    subtitle: "Bold, distinguished, and magnetic extraits crafted with masculine depth.",
-    items: [
-      {
-        id: "alpha-chrome",
-        name: "Alpha Chrome Pure Parfum",
-        subtitle: "Woody Aromatic & Crisp Bergamot",
-        price: 175,
-        image: "/products/chrome01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Cardamom, Cedarwood, Vetiver, Silver Birch",
-      },
-      {
-        id: "fearless-men",
-        name: "Fearless Extrait",
-        subtitle: "Smoky Leather & Amber Woods",
-        price: 185,
-        image: "/products/fearless01-1.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Leather, Incense, Dark Amber, Oud Wood",
-      },
-      {
-        id: "saphir-men",
-        name: "Saphir Royal Elixir",
-        subtitle: "Oceanic Cedar & Spiced Pepper",
-        price: 210,
-        image: "/products/sapphire01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Sea Salt, Black Pepper, Blue Cypress, Ambergris",
-      },
-      {
-        id: "cobalt-royale",
-        name: "Cobalt Royale Extrait",
-        subtitle: "Noble Vetiver & Smoked Bergamot",
-        price: 225,
-        image: "/products/cobalt_royale.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "French Bergamot, Elemi Resin, Vetiver Bourbon, Cedar",
-      },
-      {
-        id: "black-phoenix",
-        name: "Black Phoenix Niche Parfum",
-        subtitle: "Charred Oud, Cinnamon & Tobacco",
-        price: 240,
-        image: "/products/black_phoenix.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Black Spices, Smoked Tobacco, Oud Wood, Dark Leather",
-      },
-    ],
-  },
-  women: {
-    title: "Women's Niche Fragrances",
-    subtitle: "Opulent floral bouquets, warm gourmand accords, and silk-smooth sillage.",
-    items: [
-      {
-        id: "wild-caramel-women",
-        name: "Wild Caramel Gourmand",
-        subtitle: "Velvet Vanilla & Burnt Sugar",
-        price: 195,
-        image: "/products/wild01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Dulce de Leche, Madagascar Vanilla, Praline, Sandalwood",
-      },
-      {
-        id: "intensa-women",
-        name: "Intensa Velour Extrait",
-        subtitle: "Damask Rose & Golden Honey",
-        price: 190,
-        image: "/products/intensa01-1.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Turkish Rose, Wild Blackberry, Patchouli, Benzoin",
-      },
-      {
-        id: "jade-women",
-        name: "Jade Imperial",
-        subtitle: "White Tea, Jasmine & Cashmere",
-        price: 220,
-        image: "/products/jade01-1.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Green Tea Blossom, Sambac Jasmine, Cashmeran, Musk",
-      },
-      {
-        id: "enchante-women",
-        name: "Enchanté Privé",
-        subtitle: "Powdery Violet & Silk Petals",
-        price: 205,
-        image: "/products/enchante01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Sweet Violet, Heliotrope, White Cedar, Silken Amber",
-      },
-      {
-        id: "desert-rose-women",
-        name: "Desert Rose Royal Extrait",
-        subtitle: "Taif Rose, Crimson Saffron & Amber",
-        price: 230,
-        image: "/products/desert_rose.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Taif Rose Petals, Saffron, Amber Resin, Sandalwood",
-      },
-    ],
-  },
-  unisex: {
-    title: "Unisex Haute Parfumerie",
-    subtitle: "Boundary-defying fragrance compositions that adapt uniquely to every skin.",
-    items: [
-      {
-        id: "oros-grande-unisex",
-        name: "Oros Grande Extrait",
-        subtitle: "Precious Saffron & Liquid Gold",
-        price: 235,
-        image: "/products/oros01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Saffron, Golden Amber, Dry Woods, White Oud",
-      },
-      {
-        id: "imperial-gold-unisex",
-        name: "Imperial Gold Elixir",
-        subtitle: "Pure Liquid Amber & Warm Tonka",
-        price: 245,
-        image: "/products/imperial_gold_elixir.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Spiced Cinnamon, Liquid Amber, Benzoin, Tonka Bean",
-      },
-      {
-        id: "fearless-unisex",
-        name: "Fearless Eau de Parfum",
-        subtitle: "Modern Chypre & Smoked Vanilla",
-        price: 185,
-        image: "/products/fearless03.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Bergamot, Birch Tar, Guaiacwood, Oakmoss",
-      },
-      {
-        id: "saphir-unisex",
-        name: "Saphir Niche Extrait",
-        subtitle: "Midnight Iris & Mineral Musk",
-        price: 210,
-        image: "/products/sapphire02.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Florentine Iris, Violet Leaf, Elemi, Cashmere Musk",
-      },
-      {
-        id: "mysterious-unisex",
-        name: "Mysterious Niche Parfum",
-        subtitle: "Enigmatic Frankincense & Black Plum",
-        price: 220,
-        image: "/products/mysterious.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Black Plum, Omani Incense, Labdanum, Smoked Birch",
-      },
-    ],
-  },
-  "new-arrivals": {
-    title: "New Arrivals & Limited Editions",
-    subtitle: "The latest rare botanical extraits and limited small-batch creations.",
-    items: [
-      {
-        id: "oros-grande-new",
-        name: "Oros Grande Extrait",
-        subtitle: "2026 Vintage Limited Reserve",
-        price: 235,
-        image: "/products/oros01.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Saffron, Golden Amber, Dry Woods, White Oud",
-      },
-      {
-        id: "jade-new",
-        name: "Jade Imperial Edition",
-        subtitle: "Spring Harvest Green Tea & Jasmine",
-        price: 220,
-        image: "/products/jade02.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Green Tea Blossom, Sambac Jasmine, Cashmeran, Musk",
-      },
-      {
-        id: "intensa-new",
-        name: "Intensa Velour Extrait",
-        subtitle: "Special Edition Intense Concentration",
-        price: 190,
-        image: "/products/intensa03.webp",
-        volume: "100ml / 3.4 fl. oz.",
-        notes: "Turkish Rose, Wild Blackberry, Patchouli, Benzoin",
-      },
-      {
-        id: "set-fearless-gift",
-        name: "Fearless Discovery Gift Set",
-        subtitle: "Extrait Bottle + Travel Atomizer + Body Mist",
-        price: 260,
-        image: "/products/set_fearless.webp",
-        volume: "Full Luxury Set",
-        notes: "Signature Fearless Notes in 3 Bespoke Formulations",
-      },
-      {
-        id: "set-jade-gift",
-        name: "Jade Imperial Discovery Set",
-        subtitle: "Pure Parfum + Scented Travel Case",
-        price: 275,
-        image: "/products/set_jade.webp",
-        volume: "Full Luxury Set",
-        notes: "Jade Imperial Signature Green Tea & Cashmere",
-      },
-    ],
-  },
-};
+import { CATEGORY_DETAILS, PRODUCTS, Product, ROYAL_COLLECTION } from "@/lib/products";
 
 export default function CategoryPage({
   params,
@@ -230,75 +14,207 @@ export default function CategoryPage({
 }) {
   const { slug } = use(params);
   const { addItem } = useCart();
+  const [activeFilter, setActiveFilter] = useState<"all" | "royal" | "classic" | "sets">("all");
 
-  const category = PRODUCTS[slug] || {
-    title: `${slug.replace("-", " ").toUpperCase()} Fragrances`,
-    subtitle: "Discover our luxury fragrances and rare artisanal perfumes.",
-    items: PRODUCTS["unisex"].items,
+  const category = CATEGORY_DETAILS[slug] || {
+    title: `${slug.replace(/-/g, " ").toUpperCase()} Fragrances`,
+    subtitle: "Explore our collection of meticulously crafted niche fragrances.",
+    badge: "Haute Parfumerie",
+    featuredImage: "/products/black_phoenix.webp",
+    products: PRODUCTS,
   };
+
+  const filteredProducts = useMemo(() => {
+    if (activeFilter === "all") return category.products;
+    if (activeFilter === "royal") return category.products.filter((p) => p.isRoyal);
+    if (activeFilter === "classic") return category.products.filter((p) => !p.isRoyal && p.collection !== "sets");
+    if (activeFilter === "sets") return category.products.filter((p) => p.collection === "sets");
+    return category.products;
+  }, [category.products, activeFilter]);
+
+  const hasRoyal = category.products.some((p) => p.isRoyal);
+  const hasClassic = category.products.some((p) => !p.isRoyal && p.collection !== "sets");
+  const hasSets = category.products.some((p) => p.collection === "sets");
 
   return (
     <div className="bg-white min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Category Header */}
-      <div className="border-b border-neutral-100 pb-8 mb-10 text-center max-w-2xl mx-auto">
-        <span className="inline-block text-xs uppercase tracking-widest font-semibold text-[#5a0d29] mb-2">
-          Calra Collections
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 mb-3">
-          {category.title}
-        </h1>
-        <p className="text-sm text-neutral-500 leading-relaxed">
-          {category.subtitle}
+      {/* Category Header Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#5a0d29] via-[#43081e] to-[#2b0413] text-white p-8 sm:p-12 mb-10 shadow-lg">
+        <div className="relative z-10 max-w-2xl">
+          <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-widest text-rose-200 backdrop-blur-xs mb-3">
+            {category.badge}
+          </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-3">
+            {category.title}
+          </h1>
+          <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed font-normal max-w-xl">
+            {category.subtitle}
+          </p>
+        </div>
+
+        {/* Decorative background circle */}
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 pointer-events-none" />
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-neutral-100">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveFilter("all")}
+            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-full ${
+              activeFilter === "all"
+                ? "bg-[#5a0d29] text-white shadow-xs"
+                : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+            }`}
+          >
+            All Items ({category.products.length})
+          </button>
+
+          {hasRoyal && (
+            <button
+              type="button"
+              onClick={() => setActiveFilter("royal")}
+              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-full ${
+                activeFilter === "royal"
+                  ? "bg-[#9e7d3b] text-white shadow-xs"
+                  : "bg-[#faf6ee] text-[#7d5f29] border border-[#e2d6bf] hover:bg-[#f3ebd9]"
+              }`}
+            >
+              The Royal Collection
+            </button>
+          )}
+
+          {hasClassic && (
+            <button
+              type="button"
+              onClick={() => setActiveFilter("classic")}
+              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-full ${
+                activeFilter === "classic"
+                  ? "bg-[#5a0d29] text-white shadow-xs"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+              }`}
+            >
+              Classic Collection
+            </button>
+          )}
+
+          {hasSets && (
+            <button
+              type="button"
+              onClick={() => setActiveFilter("sets")}
+              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all rounded-full ${
+                activeFilter === "sets"
+                  ? "bg-[#5a0d29] text-white shadow-xs"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+              }`}
+            >
+              Discovery Sets
+            </button>
+          )}
+        </div>
+
+        <p className="text-xs text-neutral-400 font-medium">
+          Showing {filteredProducts.length} {filteredProducts.length === 1 ? "fragrance" : "fragrances"}
         </p>
       </div>
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-        {category.items.map((product) => (
+        {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="group flex flex-col justify-between rounded-xl border border-neutral-100 bg-neutral-50/50 p-6 transition-all duration-300 hover:shadow-lg hover:border-neutral-200"
+            className={`group relative flex flex-col justify-between rounded-2xl border transition-all duration-300 hover:shadow-xl ${
+              product.isRoyal
+                ? "border-[#ded3be] bg-gradient-to-b from-[#faf6ee]/60 via-white to-white hover:border-[#b89758] ring-1 ring-[#b89758]/20"
+                : "border-neutral-200/80 bg-neutral-50/40 hover:border-neutral-300"
+            } p-6`}
           >
-            {/* Product Image */}
-            <div className="relative aspect-square w-full mb-6 overflow-hidden rounded-lg bg-white p-4">
+            {/* Top Badges */}
+            <div className="flex items-center justify-between mb-4 z-10">
+              {product.isRoyal ? (
+                <span className="rounded-full bg-gradient-to-r from-[#b39355] to-[#997938] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-xs">
+                  New Collection
+                </span>
+              ) : (
+                <span className="rounded-full bg-neutral-100 border border-neutral-200 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-700">
+                  {product.tag}
+                </span>
+              )}
+
+              <span className="text-[11px] font-semibold text-neutral-500 bg-white/80 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-neutral-200/60">
+                {product.volume}
+              </span>
+            </div>
+
+            {/* Product Image with Hover transition if secondary exists */}
+            <div className="relative aspect-square w-full mb-6 overflow-hidden rounded-xl bg-white p-4 shadow-2xs group-hover:bg-neutral-50/50 transition-colors">
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-contain transition-transform duration-500 group-hover:scale-105"
+                className={`object-contain transition-all duration-500 group-hover:scale-105 ${
+                  product.secondaryImage ? "group-hover:opacity-0" : ""
+                }`}
               />
-              <span className="absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-xs px-2.5 py-1 text-[11px] font-semibold text-neutral-700 shadow-xs border border-neutral-100">
-                {product.volume}
-              </span>
+
+              {product.secondaryImage && (
+                <Image
+                  src={product.secondaryImage}
+                  alt={`${product.name} bottle detail`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-contain absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 p-4"
+                />
+              )}
             </div>
 
-            {/* Info */}
+            {/* Product Details */}
             <div className="flex-1 flex flex-col justify-between">
               <div>
-                <p className="text-xs uppercase tracking-wider font-semibold text-[#5a0d29] mb-1">
-                  Extrait De Parfum
-                </p>
-                <h3 className="text-lg font-bold text-neutral-900 group-hover:text-[#5a0d29] transition-colors">
+                <div className="flex items-center gap-2 mb-1">
+                  <span
+                    className={`text-[11px] font-bold uppercase tracking-wider ${
+                      product.isRoyal ? "text-[#8c6d36]" : "text-[#5a0d29]"
+                    }`}
+                  >
+                    {product.collectionName}
+                  </span>
+                </div>
+
+                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-[#5a0d29] transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-xs text-neutral-500 mt-1">{product.subtitle}</p>
 
-                <div className="mt-3 py-2 border-t border-b border-neutral-100/80">
-                  <p className="text-[11px] text-neutral-400">Key Notes:</p>
-                  <p className="text-xs text-neutral-600 font-medium line-clamp-1">
+                <p className="text-xs text-neutral-600 mt-2 leading-relaxed font-normal line-clamp-2">
+                  {product.description}
+                </p>
+
+                {/* Olfactory Notes Box */}
+                <div className="mt-4 p-3 rounded-lg bg-neutral-50 border border-neutral-100">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-400 block mb-0.5">
+                    Olfactory Notes
+                  </span>
+                  <p className="text-xs text-neutral-700 font-medium line-clamp-2">
                     {product.notes}
                   </p>
                 </div>
               </div>
 
-              {/* Price & Action */}
-              <div className="mt-6 flex items-center justify-between pt-2">
+              {/* Price & Add to Bag Action */}
+              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-neutral-400 block">Price</span>
-                  <span className="text-xl font-bold text-neutral-900">
-                    ${product.price.toFixed(2)}
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-400 block">
+                    Price
                   </span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-neutral-900">
+                      ${product.price.toFixed(2)}
+                    </span>
+                    <span className="text-[11px] text-neutral-500">USD</span>
+                  </div>
                 </div>
 
                 <button
@@ -313,7 +229,11 @@ export default function CategoryPage({
                       volume: product.volume,
                     })
                   }
-                  className="inline-flex items-center gap-2 bg-[#5a0d29] text-white px-4 py-2.5 text-xs uppercase tracking-widest font-semibold hover:bg-[#43081e] active:scale-95 transition-all shadow-xs"
+                  className={`inline-flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-widest font-bold text-white transition-all shadow-sm active:scale-95 ${
+                    product.isRoyal
+                      ? "bg-gradient-to-r from-[#9e7d3b] to-[#5a0d29] hover:from-[#88692c] hover:to-[#43081e]"
+                      : "bg-[#5a0d29] hover:bg-[#43081e]"
+                  }`}
                 >
                   <ShoppingBag className="size-3.5" />
                   <span>Add to Bag</span>
@@ -322,6 +242,30 @@ export default function CategoryPage({
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Collection Distinction Banner at Bottom */}
+      <div className="mt-16 rounded-2xl bg-neutral-50 border border-neutral-200/80 p-8 sm:p-10 text-center max-w-4xl mx-auto">
+        <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
+          Discover The Calra Perfumes Standards
+        </h3>
+        <p className="text-xs sm:text-sm text-neutral-600 max-w-2xl mx-auto mb-6">
+          Every fragrance is brewed as a concentrated Extrait de Parfum to ensure unmatched sillage and longevity. Explore the newly arrived Royal Collection editions, or indulge in our classic and discovery sets.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/category/new-arrivals"
+            className="bg-[#5a0d29] text-white px-6 py-3 text-xs uppercase font-bold tracking-widest hover:bg-[#43081e] transition-colors"
+          >
+            Shop New Arrivals
+          </Link>
+          <Link
+            href="/category/unisex"
+            className="border border-neutral-300 text-neutral-800 px-6 py-3 text-xs uppercase font-bold tracking-widest hover:border-[#5a0d29] hover:text-[#5a0d29] transition-colors"
+          >
+            Explore All Collections
+          </Link>
+        </div>
       </div>
     </div>
   );

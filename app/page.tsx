@@ -3,75 +3,42 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShoppingBag, Sparkles, Award, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, ShoppingBag, Award, ShieldCheck, Truck } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { BrandStoryCarousel } from "@/components/brand-story-carousel";
-
-const FEATURED_PRODUCTS = [
-  {
-    id: "fearless-featured",
-    name: "Fearless Extrait de Parfum",
-    category: "Unisex / Signature",
-    price: 185,
-    image: "/products/fearless01-1.webp",
-    volume: "100ml / 3.4 fl. oz.",
-    tag: "Bestseller",
-  },
-  {
-    id: "saphir-featured",
-    name: "Saphir Royal Elixir",
-    category: "Men / Woody Aquatic",
-    price: 210,
-    image: "/products/sapphire01.webp",
-    volume: "100ml / 3.4 fl. oz.",
-    tag: "Artisanal",
-  },
-  {
-    id: "wild-caramel-featured",
-    name: "Wild Caramel Gourmand",
-    category: "Women / Sweet Amber",
-    price: 195,
-    image: "/products/wild01.webp",
-    volume: "100ml / 3.4 fl. oz.",
-    tag: "New",
-  },
-  {
-    id: "oros-grande-featured",
-    name: "Oros Grande Pure Extrait",
-    category: "Unisex / Golden Saffron",
-    price: 235,
-    image: "/products/oros01.webp",
-    volume: "100ml / 3.4 fl. oz.",
-    tag: "Limited Edition",
-  },
-];
+import { ROYAL_COLLECTION, PRODUCTS } from "@/lib/products";
 
 const CATEGORIES = [
   {
     title: "MEN",
     desc: "Distinguished extraits & bold woody accords",
     href: "/category/men",
-    image: "/products/chrome01.webp",
+    image: "/products/cobalt_royale.webp",
   },
   {
     title: "WOMEN",
     desc: "Sensual floral bouquets & warm velvet sillage",
     href: "/category/women",
-    image: "/products/wild01.webp",
+    image: "/products/desert_rose.webp",
   },
   {
     title: "UNISEX",
     desc: "Enigmatic compositions tailored for individual identity",
     href: "/category/unisex",
-    image: "/products/oros01.webp",
+    image: "/products/imperial_gold_elixir.webp",
   },
   {
     title: "NEW ARRIVALS",
-    desc: "Latest small-batch creations & seasonal harvests",
+    desc: "The New Collection extraits & limited sets",
     href: "/category/new-arrivals",
-    image: "/products/jade01-1.webp",
+    image: "/products/black_phoenix.webp",
   },
 ];
+
+// Curated classic bestsellers ($250 each)
+const CLASSIC_FEATURED = PRODUCTS.filter(
+  (p) => ["alpha-chrome", "fearless-extrait", "alpha-oros-grande", "wild-caramel"].includes(p.id)
+);
 
 export default function Home() {
   const { addItem } = useCart();
@@ -90,8 +57,8 @@ export default function Home() {
             sizes="100vw"
             className="object-cover object-center"
           />
-          {/* Subtle gradient overlay to let header01.webp be clearly visible while maintaining text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/35 via-white/15 to-transparent pointer-events-none" />
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/20 to-transparent pointer-events-none" />
         </div>
 
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -106,7 +73,7 @@ export default function Home() {
             </h1>
 
             <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-normal">
-              Elevate your experience with Calra Perfumes Niche Fragances, where scent meets sophistication. Explore our collection of meticulously crafted fragrances, each bottle embodying luxury, elegance, and timeless allure.
+              Elevate your experience with Calra Perfumes Niche Fragrances, where scent meets sophistication. Explore our collection of meticulously crafted fragrances, each bottle embodying luxury, elegance, and timeless allure.
             </p>
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2">
@@ -114,7 +81,7 @@ export default function Home() {
                 href="/category/new-arrivals"
                 className="bg-[#5a0d29] text-white px-7 py-3.5 text-xs font-bold uppercase tracking-widest hover:bg-[#43081e] transition-all shadow-md flex items-center gap-2 group"
               >
-                <span>Explore New Arrivals</span>
+                <span>Explore New Collection</span>
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
 
@@ -131,7 +98,7 @@ export default function Home() {
               <div className="flex items-center gap-2 shrink-0">
                 <ShieldCheck className="size-4 text-[#5a0d29] shrink-0" />
                 <span className="text-[11px] sm:text-xs font-medium text-neutral-700 whitespace-nowrap">
-                  100% Authentic
+                  100% Authentic Extrait
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -147,6 +114,87 @@ export default function Home() {
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* THE ROYAL COLLECTION SPOTLIGHT SECTION */}
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-[#faf7f0]/70 via-white to-neutral-50/50 border-b border-neutral-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <span className="inline-block text-xs font-bold tracking-widest uppercase text-[#8c6d36] mb-1">
+                The New Collection
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 mt-1">
+                The Royal Collection
+              </h2>
+              <p className="text-xs sm:text-sm text-neutral-600 mt-2 max-w-2xl">
+                Distinguished by an iconic sculpted bottle with polished gold shoulders and presented in tailored reptile & mosaic coffrets. Pure concentrated Extrait de Parfum.
+              </p>
+            </div>
+
+            <Link
+              href="/category/new-arrivals"
+              className="inline-flex items-center gap-2 bg-[#5a0d29] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-[#43081e] transition-all self-start md:self-auto shrink-0 shadow-xs"
+            >
+              <span>View The New Collection</span>
+              <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {ROYAL_COLLECTION.map((product) => (
+              <div
+                key={product.id}
+                className="group flex flex-col justify-between rounded-2xl bg-white border border-[#ded3be] p-5 shadow-xs transition-all duration-300 hover:shadow-xl hover:border-[#b89758] hover:-translate-y-1 ring-1 ring-[#b89758]/20"
+              >
+                <div>
+                  <div className="relative aspect-square w-full mb-4 bg-gradient-to-b from-[#faf6ee] to-neutral-50/50 rounded-xl p-4 overflow-hidden">
+                    <span className="absolute top-2.5 left-2.5 z-10 rounded-full bg-gradient-to-r from-[#b39355] to-[#997938] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-xs">
+                      New Collection
+                    </span>
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="220px"
+                      className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+
+                  <h3 className="text-base font-bold text-neutral-900 group-hover:text-[#5a0d29] transition-colors mt-0.5">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs text-neutral-500 mt-0.5 line-clamp-1">{product.subtitle}</p>
+                  <p className="text-[11px] text-neutral-400 mt-2 line-clamp-2">{product.notes}</p>
+                </div>
+
+                <div className="mt-5 pt-3 border-t border-neutral-100 flex items-center justify-between">
+                  <span className="text-base font-bold text-neutral-900">
+                    ${product.price.toFixed(2)}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addItem({
+                        id: product.id,
+                        name: product.name,
+                        subtitle: product.subtitle,
+                        price: product.price,
+                        image: product.image,
+                        volume: product.volume,
+                      })
+                    }
+                    className="inline-flex items-center gap-1.5 bg-[#5a0d29] text-white px-3 py-2 text-xs font-bold uppercase tracking-wider hover:bg-[#43081e] active:scale-95 transition-all shadow-xs"
+                  >
+                    <ShoppingBag className="size-3" />
+                    <span>Add</span>
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -177,7 +225,7 @@ export default function Home() {
                 </p>
 
                 <p>
-                  With Calra Perfumes Niche Fragrances you will indulge in the allure of our carefully crafted fragrances, where sophistication meets innovation. We pride ourselves on the quality of our ingredients, the precision of our craftsmanship, and the timeless elegance of our bottles. Explore the scents that speak to your soul, and let us be the curator of your fragrant narrative.
+                  With Calra Perfumes Niche Fragrances you will indulge in the allure of our carefully crafted fragrances, where sophistication meets innovation. We pride ourselves on the quality of our ingredients, the precision of our craftsmanship, and the timeless elegance of our bottles.
                 </p>
               </div>
 
@@ -198,7 +246,6 @@ export default function Home() {
       <section className="py-14 sm:py-20 bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 text-center">
-            {/* 1: Exquisite Craftsmanship */}
             <div className="flex flex-col items-center group">
               <div className="relative size-14 sm:size-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                 <Image
@@ -214,7 +261,6 @@ export default function Home() {
               </h3>
             </div>
 
-            {/* 2: Luxurious Experience */}
             <div className="flex flex-col items-center group">
               <div className="relative size-14 sm:size-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                 <Image
@@ -230,7 +276,6 @@ export default function Home() {
               </h3>
             </div>
 
-            {/* 3: Timeless Elegance */}
             <div className="flex flex-col items-center group">
               <div className="relative size-14 sm:size-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                 <Image
@@ -246,7 +291,6 @@ export default function Home() {
               </h3>
             </div>
 
-            {/* 4: Captivating Scents */}
             <div className="flex flex-col items-center group">
               <div className="relative size-14 sm:size-16 mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                 <Image
@@ -310,35 +354,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Fragrances Section */}
+      {/* Signature & Classic Fragrances Section ($250) */}
       <section className="py-16 bg-[#faf7f8] border-t border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
             <div>
               <span className="text-xs font-bold tracking-widest uppercase text-[#5a0d29]">
-                Featured Selections
+                Classic & Signature Editions
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 mt-1">
                 Artisanal Masterpieces
               </h2>
             </div>
             <Link
-              href="/category/new-arrivals"
+              href="/category/unisex"
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#5a0d29] hover:underline"
             >
-              <span>View Full Catalogue</span>
+              <span>View All Classic Fragrances</span>
               <ArrowRight className="size-3.5" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURED_PRODUCTS.map((product) => (
+            {CLASSIC_FEATURED.map((product) => (
               <div
                 key={product.id}
                 className="group flex flex-col justify-between rounded-xl bg-white border border-neutral-100 p-5 shadow-xs transition-all duration-300 hover:shadow-md hover:border-neutral-200"
               >
                 <div className="relative aspect-square w-full mb-4 bg-neutral-50 rounded-lg p-4 overflow-hidden">
-                  <span className="absolute top-2.5 left-2.5 z-10 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#5a0d29] shadow-xs">
+                  <span className="absolute top-2.5 left-2.5 z-10 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#5a0d29] shadow-xs">
                     {product.tag}
                   </span>
                   <Image
@@ -353,7 +397,7 @@ export default function Home() {
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <p className="text-[11px] text-neutral-400 font-medium">
-                      {product.category}
+                      {product.collectionName}
                     </p>
                     <h3 className="text-sm font-bold text-neutral-900 group-hover:text-[#5a0d29] transition-colors mt-0.5">
                       {product.name}
@@ -372,12 +416,13 @@ export default function Home() {
                         addItem({
                           id: product.id,
                           name: product.name,
+                          subtitle: product.subtitle,
                           price: product.price,
                           image: product.image,
                           volume: product.volume,
                         })
                       }
-                      className="inline-flex items-center gap-1.5 bg-[#5a0d29] text-white px-3 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-[#43081e] active:scale-95 transition-all"
+                      className="inline-flex items-center gap-1.5 bg-[#5a0d29] text-white px-3 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-[#43081e] active:scale-95 transition-all shadow-xs"
                     >
                       <ShoppingBag className="size-3" />
                       <span>Add</span>
