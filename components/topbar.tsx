@@ -36,14 +36,16 @@ export function TopBar({
     >
       <div className="mx-auto flex min-h-9 max-w-7xl flex-wrap items-center justify-between gap-y-2 px-4 py-1.5 sm:px-6 lg:px-8">
         {/* Left Side: Contact Information */}
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+        <div className="flex items-center gap-x-3 sm:gap-x-5">
           {email && (
             <a
               href={`mailto:${email}`}
-              className="inline-flex items-center gap-1.5 text-rose-50/90 transition-colors hover:text-white"
+              aria-label={`Email: ${email}`}
+              title={email}
+              className="inline-flex items-center gap-1.5 py-1 text-rose-50/90 transition-colors hover:text-white"
             >
               <Mail className="size-3.5 shrink-0 opacity-90" aria-hidden="true" />
-              <span>{email}</span>
+              <span className="hidden md:inline">{email}</span>
             </a>
           )}
 
@@ -52,10 +54,12 @@ export function TopBar({
               href={addressUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-rose-50/90 transition-colors hover:text-white"
+              aria-label={`Address: ${address}`}
+              title={address}
+              className="inline-flex items-center gap-1.5 py-1 text-rose-50/90 transition-colors hover:text-white"
             >
               <MapPin className="size-3.5 shrink-0 opacity-90" aria-hidden="true" />
-              <span>{address}</span>
+              <span className="hidden md:inline">{address}</span>
             </a>
           )}
         </div>
