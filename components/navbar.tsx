@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +19,34 @@ export function Navbar({ className }: { className?: string }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { totalCount, openCart } = useCart();
+
+  // Close sidebar when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  // Lock body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <header
@@ -114,66 +142,165 @@ export function Navbar({ className }: { className?: string }) {
           {/* Mobile Menu Hamburger Button */}
           <button
             type="button"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            onClick={() => setMobileMenuOpen(true)}
             className="inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-[#5a0d29] hover:bg-neutral-100 md:hidden"
             aria-expanded={mobileMenuOpen}
-            aria-label="Toggle mobile menu"
+            aria-label="Open mobile menu"
           >
-            {mobileMenuOpen ? (
-              <X className="size-6" />
-            ) : (
-              <Menu className="size-6" />
-            )}
+            <Menu className="size-6" />
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Sliding Sidebar (Left to Right) */}
       {mobileMenuOpen && (
-        <div className="border-t border-neutral-100 bg-white px-4 pt-3 pb-6 md:hidden shadow-lg animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col space-y-3">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2 text-sm font-bold tracking-wider text-neutral-800 hover:text-[#5a0d29] border-b border-neutral-50"
-              >
-                {item.label}
-              </Link>
-            ))}
+        <div
+          className="fixed inset-0 z-50 overflow-hidden md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation Menu"
+        >
+          {/* Backdrop overlay */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-300"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
 
-            <div className="pt-3 flex items-center justify-between border-t border-neutral-100 text-sm font-semibold text-[#5a0d29]">
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/login?mode=signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="hover:underline"
-                >
-                  Register
-                </Link>
-                <span className="text-neutral-300">|</span>
-                <Link
-                  href="/login?mode=signin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="hover:underline"
-                >
-                  Login
-                </Link>
+          {/* Sliding Sidebar Panel from Left */}
+          <div className="fixed inset-y-0 left-0 flex max-w-full pr-12">
+            <div className="w-screen max-w-xs sm:max-w-sm bg-white shadow-2xl flex flex-col justify-between transform transition-transform ease-out duration-300 animate-in slide-in-from-left">
+              {/* Top & Scrollable Links */}
+              <div className="flex flex-col flex-1 overflow-y-auto">
+                {/* Header with Logo and Close Button */}
+                <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100 bg-[#faf7f8]">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center"
+                    aria-label="Calra Perfumes Home"
+                  >
+                    <Image
+                      src="/logo.png"
+                      alt="CALRA NICHE FRAGRANCES"
+                      width={130}
+                      height={40}
+                      className="h-8 w-auto object-contain"
+                    />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-full p-2 text-neutral-400 hover:text-neutral-700 hover:bg-white transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <X className="size-5" />
+                  </button>
+                </div>
+
+                {/* Primary Collection Links */}
+                <div className="px-6 py-5">
+                  <span className="text-[11px] font-bold tracking-widest uppercase text-[#5a0d29]/80 block mb-3">
+                    Collections
+                  </span>
+                  <nav className="flex flex-col space-y-1">
+                    {NAV_LINKS.map((item) => {
+                      const isActive = pathname === item.href;
+                      return (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center justify-between py-3 px-3 rounded-lg text-sm font-bold tracking-wider uppercase transition-colors",
+                            isActive
+                              ? "bg-[#5a0d29]/10 text-[#5a0d29]"
+                              : "text-neutral-800 hover:bg-neutral-50 hover:text-[#5a0d29]"
+                          )}
+                        >
+                          <span>{item.label}</span>
+                          <ChevronRight
+                            className={cn(
+                              "size-4 transition-transform",
+                              isActive ? "text-[#5a0d29]" : "text-neutral-300"
+                            )}
+                          />
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+
+                {/* Secondary Quick Links */}
+                <div className="px-6 py-4 border-t border-neutral-100">
+                  <span className="text-[11px] font-bold tracking-widest uppercase text-neutral-400 block mb-2.5">
+                    Customer Care
+                  </span>
+                  <div className="flex flex-col space-y-2 text-xs font-semibold text-neutral-600">
+                    <Link
+                      href="/about"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-1.5 hover:text-[#5a0d29] transition-colors"
+                    >
+                      About Us
+                    </Link>
+                    <Link
+                      href="/contact"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-1.5 hover:text-[#5a0d29] transition-colors"
+                    >
+                      Contact Us
+                    </Link>
+                    <Link
+                      href="/faq"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-1.5 hover:text-[#5a0d29] transition-colors"
+                    >
+                      Frequently Asked Questions
+                    </Link>
+                  </div>
+                </div>
               </div>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openCart();
-                }}
-                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider bg-[#5a0d29]/10 px-3 py-1.5 rounded-full"
-              >
-                <ShoppingBag className="size-4" />
-                <span>Bag ({totalCount})</span>
-              </button>
+              {/* Bottom Sticky Action Bar */}
+              <div className="p-6 border-t border-neutral-100 bg-[#faf7f8] space-y-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openCart();
+                  }}
+                  className="w-full flex items-center justify-between bg-[#5a0d29] text-white px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-[#43081e] transition-colors shadow-xs"
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingBag className="size-4" />
+                    <span>Shopping Bag</span>
+                  </div>
+                  <span className="bg-white/20 rounded-full px-2 py-0.5 text-[11px]">
+                    {totalCount} {totalCount === 1 ? "item" : "items"}
+                  </span>
+                </button>
+
+                <div className="flex items-center justify-center gap-3 text-xs font-semibold text-[#5a0d29] pt-1">
+                  <Link
+                    href="/login?mode=signin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline py-1"
+                  >
+                    Login
+                  </Link>
+                  <span className="text-neutral-300">|</span>
+                  <Link
+                    href="/login?mode=signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="hover:underline py-1"
+                  >
+                    Create Account
+                  </Link>
+                </div>
+              </div>
             </div>
-          </nav>
+          </div>
         </div>
       )}
     </header>
