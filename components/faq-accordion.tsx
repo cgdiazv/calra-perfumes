@@ -19,7 +19,7 @@ const FAQ_DATA: FAQItem[] = [
     category: "Shipping & Orders",
     question: "How does complimentary shipping work?",
     answer:
-      "We offer complimentary standard shipping on all orders over $100 within the United States. For orders below $100, standard delivery is calculated at checkout based on your delivery address.",
+      "We offer complimentary standard shipping on all orders over $250 within the United States. For orders below $250, standard delivery is calculated at checkout based on your delivery address.",
   },
   {
     id: "delivery-time",

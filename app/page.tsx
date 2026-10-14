@@ -104,7 +104,7 @@ export default function Home() {
               <div className="flex items-center gap-2 shrink-0">
                 <Truck className="size-4 text-[#5a0d29] shrink-0" />
                 <span className="text-[11px] sm:text-xs font-medium text-neutral-700 whitespace-nowrap">
-                  Free US Shipping $100+
+                  Free US Shipping $250+
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">

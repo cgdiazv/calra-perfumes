@@ -7,7 +7,7 @@ import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, ShieldCheck } from "lu
 import { useCart } from "@/context/cart-context";
 import { cn } from "@/lib/utils";
 
-const FREE_SHIPPING_THRESHOLD = 100;
+const FREE_SHIPPING_THRESHOLD = 250;
 
 export function CartDrawer() {
   const {
@@ -18,7 +18,6 @@ export function CartDrawer() {
     updateQuantity,
     totalCount,
     totalPrice,
-    addItem,
   } = useCart();
 
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -135,28 +134,12 @@ export function CartDrawer() {
                   Explore our luxury fragrance collections to find your signature scent.
                 </p>
 
-                <div className="flex flex-col gap-2.5 w-full max-w-xs">
+                <div className="w-full max-w-xs">
                   <button
                     onClick={closeCart}
                     className="w-full bg-[#5a0d29] text-white py-3 text-xs uppercase tracking-widest font-semibold hover:bg-[#43081e] transition-colors"
                   >
                     Continue Shopping
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      addItem({
-                        id: "black-phoenix",
-                        name: "Black Phoenix Extrait",
-                        subtitle: "The Royal Collection",
-                        price: 375,
-                        image: "/products/black_phoenix.webp",
-                        volume: "100ml / 3.4 fl. oz.",
-                      });
-                    }}
-                    className="w-full border border-neutral-300 text-neutral-700 py-2.5 text-xs uppercase tracking-wider font-medium hover:border-[#5a0d29] hover:text-[#5a0d29] transition-colors"
-                  >
-                    + Add Demo Perfume to Bag
                   </button>
                 </div>
               </div>
